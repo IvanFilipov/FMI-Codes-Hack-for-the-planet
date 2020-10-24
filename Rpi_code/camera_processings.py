@@ -68,6 +68,14 @@ def rmsdiff(im1, im2):
         map(lambda h, i: h*(i**2), h, range(256))
     ) / (float(im1.size[0]) * im1.size[1]))
         
+
+def areEqualImages(firstImagePath, secondImagePath):
+    im1 = Image.open(img1)
+    im2 = Image.open(img2)
+    diff = rmsdiff(im1,im2)
+    limit = 0.64
+    return diff < limit;
+    
 if __name__ == "__main__":
     image = ImageSaver()
     image.start()
