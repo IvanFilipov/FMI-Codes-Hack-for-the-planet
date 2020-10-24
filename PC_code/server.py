@@ -2,7 +2,10 @@
 from time import sleep
 import requests
 
-PI_URL = 'http://192.168.2.103:8000/'
+PI_RESPONSE_SERVER_URL = 'http://192.168.2.105:8000/'
+LEFT_IMAGE = 'http://192.168.2.105/left.jpeg'
+CENTER_IMAGE = 'http://192.168.2.105/center.jpg'
+RIGHT_IMAGE = 'http://192.168.2.105right.jpg'
 
 """
 Very simple HTTP server in python for logging requests
@@ -26,9 +29,13 @@ class S(BaseHTTPRequestHandler):
         print(self.headers)
         print("get")
         print("Getting images..")
+        # tensorflow get LEFT_IMAGE
+        # tensorflow get CENTER_IMAGE
+        # tensorflow get RIGHT_IMAGE
         print("Classification....")
-        sleep(5)
-        x = requests.get(PI_URL + "?category=" + str(2))
+        clasification_result = 2 # tesnorflow clasify
+        sleep(5) # remove...
+        x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasification_result))
         print(x.text)
         #self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
