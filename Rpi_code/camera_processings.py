@@ -72,6 +72,7 @@ def areEqualImages(firstImagePath, secondImagePath):
     im2 = Image.open(secondImagePath)
     diff = rmsdiff(im1,im2)
     limit = 0.64
+    print("control diff {}".format(diff))
     return diff < limit;
 
 if __name__ == "__main__":
