@@ -57,8 +57,6 @@ class ImageSaver():
         
 
 def rmsdiff(im1, im2):
-    im1 = Image.open(im1)
-    im2 = Image.open(im2)
     "Calculate the root-mean-square difference between two images"
 
     h = ImageChops.difference(im1, im2).histogram()
@@ -75,7 +73,7 @@ def areEqualImages(firstImagePath, secondImagePath):
     diff = rmsdiff(im1,im2)
     limit = 0.64
     return diff < limit;
-    
+
 if __name__ == "__main__":
     image = ImageSaver()
     image.start()
