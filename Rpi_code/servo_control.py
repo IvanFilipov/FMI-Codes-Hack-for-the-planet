@@ -17,6 +17,9 @@ from adafruit_pca9685 import PCA9685
 # https://github.com/adafruit/Adafruit_CircuitPython_Motor
 from adafruit_motor import servo
 
+from camera_processings import ImageSaver
+from camera_processings import rmsdiff
+
 swaped = [2]
 minValues =  {
     0: 0,
@@ -288,28 +291,41 @@ class ImageSaver():
                 
         self.queue = self.queue[n:]
 
+def rmsdiff(im1, im2):
+    "Calculate the root-mean-square difference between two images"
+
+    h = ImageChops.difference(im1, im2).histogram()
+
+    # calculate rms
+    return math.sqrt(reduce(operator.add,
+        map(lambda h, i: h*(i**2), h, range(256))
+    ) / (float(im1.size[0]) * im1.size[1]))
 
 def areEqualImages(firstImagePath, secondImagePath):
-    return false;
+    im1 = Image.open(img1)
+    im2 = Image.open(img2)
+    diff = rmsdiff(im1,im2)
+    limit = 0.64
+    return diff < limit;
 
-def moveStartPosition():
-    #TODO
-def moveCapturePosition1():
-    #TODO
-def moveCapturePosition2():
-    #TODO
+# def moveStartPosition():
+#     #TODO
+# def moveCapturePosition1():
+#     #TODO
+# def moveCapturePosition2():
+#     #TODO
 
-def getTrashIndex():
-    #Send images to PC
+# def getTrashIndex():
+#     #Send images to PC
 
-    #Get answer
-    return 0
+#     #Get answer
+#     return 0
 
-def moveToTrash(index):
-    #TODO
+# def moveToTrash(index):
+#     #TODO
 
-def leaveTrash():
-    #TODO
+# def leaveTrash():
+#     #TODO
 
 
 image = ImageSaver()
@@ -318,6 +334,8 @@ controlImagePath = "./images/control.jpeg"
 p0ImagePath = "./images/p0.jpeg"
 p1ImagePath = "./images/p1.jpeg"
 p2ImagePath = "./images/p2.jpeg"
+
+controlImage = Image.open(controlImagePath)
 
 image.Captrue(controlImagePath)
 #Control image
@@ -328,17 +346,17 @@ while(True):
         time.sleep(0.5)
         continue
 
-    moveCampturePosition1()
-    image.Captrue(p1ImagePath)
-    moveCapturePosition1()
-    image.Captrue(p2ImagePath)
-    moveCapturePosition2()
+    # moveCampturePosition1()
+    # image.Captrue(p1ImagePath)
+    # moveCapturePosition1()
+    # image.Captrue(p2ImagePath)
+    # moveCapturePosition2()
 
-    trashIndex = getTrashIndex();
-    moveToTrash(trashIndex)
-    leaveTrash()
+    # trashIndex = getTrashIndex();
+    # moveToTrash(trashIndex)
+    # leaveTrash()
 
-    moveStartPosition()
+    # moveStartPosition()
 
 
 
