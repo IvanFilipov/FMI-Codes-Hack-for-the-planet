@@ -272,10 +272,10 @@ p0ImagePath = "./images/p0.jpeg"
 p1ImagePath = "./images/p1.jpeg"
 p2ImagePath = "./images/p2.jpeg"
 
-image.Captrue(controlImagePath)
+image.captrue(controlImagePath)
 #Control image
 while(True):
-    image.Captrue(p0ImagePath)
+    image.captrue(p0ImagePath)
 
     if(areEqualImages(controlImagePath, p0ImagePath) != True):
         time.sleep(0.5)
