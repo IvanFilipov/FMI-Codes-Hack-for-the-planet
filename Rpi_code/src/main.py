@@ -21,29 +21,30 @@ def block_until_object_detection(cam):
     cam.detect_object_blocking()
 
 def capture_object_from_diff_angles(cam, robo):
-    cam.store_capture(RPI_IMG_PATH_CENTER)
+    cam.store_capture(RPI_IMG_PATH_CENTER_LOCAL)
     robo.go_to_capture_left_pos()
-    cam.store_capture(RPI_IMG_PATH_LEFT)
+    cam.store_capture(RPI_IMG_PATH_LEFT_LOCAL)
     robo.go_to_capture_right_pos()
-    cam.store_capture(RPI_IMG_PATH_RIGHT)
+    cam.store_capture(RPI_IMG_PATH_RIGHT_LOCAL)
     
-    
-    
-
 
 if __name__ == "__main__":
     print("Initialization...")
     cam  = Camera()
     robo = RobotController()
+    capture_object_from_diff_angles(cam, robo)
     start_http_server_thread()
     
     while True:
+        cam.store_capture("demo_img/begining.jpg")
         print("Returning to home position...")
         robo.go_to_home_pos()
         
         print("Detecting object...")
         block_until_object_detection(cam)
-    
+        print("Detected!")
+        cam.store_capture("demo_img/end.jpg")
+
         print("Making some captures of the object...")
         capture_object_from_diff_angles(cam, robo)
     
