@@ -2,7 +2,8 @@
 from time import sleep
 import requests
 
-sys.path.append('../../common')
+import sys
+sys.path.append('../common')
 from constants import *
 
 """
@@ -12,8 +13,10 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+from process_models import ProcessModel
+# import process_models
 
-processModel = new ProcessModel()
+processModel = ProcessModel()
 
 class S(BaseHTTPRequestHandler):
     def _set_response(self):
@@ -28,13 +31,13 @@ class S(BaseHTTPRequestHandler):
         self._set_response()
         print(self.headers)
         print("get")
-        print("Getting images..")
-        print("Classification....")
-        clasificationResultIndex, clasificationResultClass = processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
-        sleep(5) # remove...
-        x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasificationResultIndex))
-        print("Clasified {}".format(clasificationResultClass))
-        print(x.text)
+        # print("Getting images..")
+        # print("Classification....")
+        # clasificationResultIndex, clasificationResultClass = processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
+        # sleep(5) # remove...
+        # x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasificationResultIndex))
+        # print("Clasified {}".format(clasificationResultClass))
+        # print(x.text)
         #self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
     def do_POST(self):
@@ -46,6 +49,15 @@ class S(BaseHTTPRequestHandler):
         print(post_data.decode('utf-8'))
         self._set_response()
         self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
+
+        
+        print("Getting images..")
+        print("Classification....")
+        clasificationResultIndex, clasificationResultClass = processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
+        sleep(5) # remove...
+        x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasificationResultIndex))
+        print("Clasified {}".format(clasificationResultClass))
+        print(x.text)
 
 def run(server_class=HTTPServer, handler_class=S, port=8080):
     logging.basicConfig(level=logging.INFO)
