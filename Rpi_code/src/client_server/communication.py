@@ -28,8 +28,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 def start_HTTP_server():
     httpd = HTTPServer(("", RPI_HTTP_SERVER_PORT), SimpleHTTPRequestHandler)
-    print("started")
-    print(CONST)
     httpd.serve_forever()
     
 
