@@ -176,12 +176,17 @@ TITA_2_BASE = 90
 TITA_2_BASE_1 = 0
 
 JOINT_UPPER_ELBOL = 4
-TITA_4_BASE = 60
+TITA_4_BASE = 150
 
 JOINT_SHOULDER = 3
 TITA_3_BASE = 90
 
 TOTAL_JOINTS_CNT = 7
+
+LEFT__RIGHT_OFFSET = -15
+LEFT_RIGHT_OFFSET_BIG = -55
+DOWN_OFFSET = 40
+DOWN_OFFSET_SMALL = 20
 
 class RobotController:
     
@@ -196,6 +201,7 @@ class RobotController:
     
     def go_to_home_pos(self):
         # OK
+        self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - 30)
         self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE)
         self.servo_controler.moveServo(JOINT_GRIPPER_GRAP, TITA_5_BASE)
         self.servo_controler.moveServo(JOINT_ROTATE_GRIPPER, TITA_6_BASE)
@@ -208,12 +214,12 @@ class RobotController:
         sleep(1)
         
     def go_to_capture_left_pos(self):
-        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 5)
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + LEFT__RIGHT_OFFSET)
         sleep(0.5)        
         print("left capture")
         
     def go_to_capture_right_pos(self):
-        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 5)
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 2 * LEFT__RIGHT_OFFSET)
         sleep(0.5)
         print("right capture")
     
@@ -222,31 +228,31 @@ class RobotController:
         
     def go_to_bin_pos(self, bin_num):
         if bin_num == 1:
-            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 20)
-            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - 20)
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + LEFT_RIGHT_OFFSET_BIG)
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - DOWN_OFFSET)
             sleep(1)
-            self.go_to_center()
             self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1)
+            self.go_to_center()
             sleep(1)
         if bin_num == 2:
-            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 10)
-            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - 10)
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + LEFT_RIGHT_OFFSET_BIG / 2)
+            self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - DOWN_OFFSET_SMALL)
             sleep(1)
+            self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
             self.go_to_center()
-            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
             sleep(1)
         if bin_num == 3:
-            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 10)
-            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - 10)
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - LEFT_RIGHT_OFFSET_BIG / 2)
+            self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - DOWN_OFFSET_SMALL)
             sleep(1)
+            self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
             self.go_to_center()
-            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
             sleep(1)
         if bin_num == 4:
-            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 20)
-            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - 20)
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - LEFT_RIGHT_OFFSET_BIG)
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - DOWN_OFFSET)
             sleep(1)
-            self.go_to_center()
             self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1)
+            self.go_to_center()
             sleep(1)
         

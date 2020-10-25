@@ -36,11 +36,11 @@ if __name__ == "__main__":
     robo = RobotController()
     start_http_server_thread()
     
+    print("Returning to home position...")
+    robo.go_to_home_pos()
+    
     while True:
         cam.store_capture("demo_img/begining.jpg")
-        print("Returning to home position...")
-        robo.go_to_home_pos()
-        
         print("Detecting object...")
         block_until_object_detection(cam)
         print("Detected!")
@@ -50,10 +50,10 @@ if __name__ == "__main__":
         capture_object_from_diff_angles(cam, robo)
     
         print("Telling the PC that we are ready with image processing...")
-        send_ready_to_PC()
+        #send_ready_to_PC()
     
         print("Blocking until the object is classified by the PC...")
-        client_sem.acquire(True) # block for client request
+        #client_sem.acquire(True) # block for client request
     
         print("Going to bin: ", get_last_category())
-        robo.go_to_bin_pos(int(get_last_category()))
+        robo.go_to_bin_pos(4) #int(get_last_category()))
