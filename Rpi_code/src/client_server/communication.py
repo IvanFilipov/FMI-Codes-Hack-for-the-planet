@@ -1,9 +1,19 @@
+import sys
+sys.path.append('../../../common')
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib import parse, request
 from urllib.parse import parse_qs, urlparse
 
-data = parse.urlencode({"a_key": "a_value"})
-data = data.encode('ascii')
+import threading
+
+from constants import *
+
+global client_sem
+global last_category
+
+client_sem = threading.Semaphore(0)
+last_category = 0
 
 url = "http://192.168.2.102:1234"
 
@@ -14,10 +24,24 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'Ok!')
         category = parse_qs(urlparse(self.path).query).get('category', None)
-        print(category)  # Prints None or the string value of imsi
+        if category is not None:
+            last_category = category[0]
+            print(last_category)
+            client_sem.release()
 
-def 
+def start_HTTP_server():
+    httpd = HTTPServer(("", 8000), SimpleHTTPRequestHandler)
+    print("started")
+    print(CONST)
+    httpd.serve_forever()
+    
 
-response = request.urlopen(url, data)
-httpd = HTTPServer(("", 8000), SimpleHTTPRequestHandler)
-httpd.serve_forever()
+def send_ready_to_PC(pc_url):
+    data = parse.urlencode({"ready": "true"})
+    data = data.encode('ascii')
+    response = request.urlopen(pc_url, data)
+    print(response)
+
+
+
+
