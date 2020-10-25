@@ -1,21 +1,18 @@
 import sys
+import threading
+
 sys.path.append('../../../common')
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib import parse, request
 from urllib.parse import parse_qs, urlparse
 
-import threading
-
 from constants import *
 
 global client_sem
 global last_category
-
 client_sem = threading.Semaphore(0)
 last_category = 0
-
-url = "http://192.168.2.102:1234"
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
@@ -23,23 +20,23 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(b'Ok!')
-        category = parse_qs(urlparse(self.path).query).get('category', None)
+        category = parse_qs(urlparse(self.path).query).get(RPI_HTTP_PARAM, None)
         if category is not None:
             last_category = category[0]
             print(last_category)
             client_sem.release()
 
 def start_HTTP_server():
-    httpd = HTTPServer(("", 8000), SimpleHTTPRequestHandler)
+    httpd = HTTPServer(("", RPI_HTTP_SERVER_PORT), SimpleHTTPRequestHandler)
     print("started")
     print(CONST)
     httpd.serve_forever()
     
 
-def send_ready_to_PC(pc_url):
+def send_ready_to_PC():
     data = parse.urlencode({"ready": "true"})
     data = data.encode('ascii')
-    response = request.urlopen(pc_url, data)
+    response = request.urlopen(PC_HTTP_POST_URL, data)
     print(response)
 
 
