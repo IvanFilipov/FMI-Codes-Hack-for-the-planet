@@ -32,7 +32,6 @@ if __name__ == "__main__":
     print("Initialization...")
     cam  = Camera()
     robo = RobotController()
-    capture_object_from_diff_angles(cam, robo)
     start_http_server_thread()
     
     while True:

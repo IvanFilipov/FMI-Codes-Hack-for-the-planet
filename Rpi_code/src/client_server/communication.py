@@ -35,7 +35,7 @@ def send_ready_to_PC():
     data = parse.urlencode({"ready": "true"})
     data = data.encode('ascii')
     response = request.urlopen(PC_HTTP_POST_URL, data)
-    print(response)
+    print("PC response:", response.status)
 
 
 
