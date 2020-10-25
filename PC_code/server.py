@@ -2,10 +2,8 @@
 from time import sleep
 import requests
 
-PI_RESPONSE_SERVER_URL = 'http://192.168.2.105:8000/'
-LEFT_IMAGE = 'http://192.168.2.105/left.jpeg'
-CENTER_IMAGE = 'http://192.168.2.105/center.jpg'
-RIGHT_IMAGE = 'http://192.168.2.105right.jpg'
+sys.path.append('../../common')
+from constants import *
 
 """
 Very simple HTTP server in python for logging requests
@@ -14,6 +12,8 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+
+processModel = new ProcessModel()
 
 class S(BaseHTTPRequestHandler):
     def _set_response(self):
@@ -29,13 +29,11 @@ class S(BaseHTTPRequestHandler):
         print(self.headers)
         print("get")
         print("Getting images..")
-        # tensorflow get LEFT_IMAGE
-        # tensorflow get CENTER_IMAGE
-        # tensorflow get RIGHT_IMAGE
         print("Classification....")
-        clasification_result = 2 # tesnorflow clasify
+        clasificationResultIndex, clasificationResultClass = processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
         sleep(5) # remove...
-        x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasification_result))
+        x = requests.get(PI_RESPONSE_SERVER_URL + "?category=" + str(clasificationResultIndex))
+        print("Clasified {}".format(clasificationResultClass))
         print(x.text)
         #self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
