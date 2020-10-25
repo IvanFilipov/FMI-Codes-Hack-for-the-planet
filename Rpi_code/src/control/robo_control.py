@@ -55,8 +55,11 @@ class ServoController:
         self.servo5 = servo.Servo(self.pca.channels[5])
         self.servo6 = servo.Servo(self.pca.channels[6])
         self.servo7 = servo.Servo(self.pca.channels[7])
+    
+    def get_servo(self, i):
+        return servo.Servo(self.pca.channels[i])
         
-    def verticaleMove(self, targetPosition):
+    def verticaleMoveDoubleGear(self, targetPosition):
         if (targetPosition > 175):
             targetPosition = 175
 
@@ -104,7 +107,7 @@ class ServoController:
 
     def moveServo(self, index, targetPosition):
         if (index == 0 or index == 1):
-            self.verticaleMove(targetPosition)
+            self.verticaleMoveDoubleGear(targetPosition)
             return
 
         # if(index == 2 or index == 4):
@@ -116,8 +119,8 @@ class ServoController:
             targetPosition = 180 - targetPosition
 
         currentServo = servo.Servo(self.pca.channels[index])
-        print(currentServo.angle)
-        print(targetPosition)
+        # print(currentServo.angle)
+        # print(targetPosition)
         if (currentServo.angle > 180):
             currentServo.angle = 180
         if (currentServo.angle < 0):
@@ -126,8 +129,8 @@ class ServoController:
         delta = 1
         if (currentServo.angle < targetPosition):
             while (currentServo.angle < targetPosition):
-                print(currentServo.angle)
-                print(targetPosition)
+                # print(currentServo.angle)
+                # print(targetPosition)
                 if (currentServo.angle + delta > targetPosition):
                     currentServo.angle = targetPosition
                     break;
@@ -153,21 +156,97 @@ class ServoController:
         if (servo.Servo(self.pca.channels[index]).angle < value):
             self.moveServo(index, targetPosition)
 
+# all angles are in absolute coordinates!
+# base rotation
+JOINT_BASE = 7
+TITA_7_BASE = 90
+
+JOINT_GRIPPER_GRAP = 5
+TITA_5_BASE = 0  # gripper
+
+JOINT_ROTATE_GRIPPER = 6
+TITA_6_BASE = 90
+
+JOINT_DOUBLE_GEAR = 0
+TITA_0_BASE = 120
+TITA_0_BASE_1 = 180 
+
+JOINT_ELBOL = 2
+TITA_2_BASE = 90
+TITA_2_BASE_1 = 0
+
+JOINT_UPPER_ELBOL = 4
+TITA_4_BASE = 60
+
+JOINT_SHOULDER = 3
+TITA_3_BASE = 90
+
+TOTAL_JOINTS_CNT = 7
+
 class RobotController:
     
     def __init__(self):
         self.pos = 0
         self.servo_controler = ServoController()
-        
+    
+    def debug_info(self):
+        for i in range(TOTAL_JOINTS_CNT + 1):
+            currentServo = self.servo_controler.get_servo(i)
+            print("JOINT %d - angle %f" % (i, currentServo.angle))
+    
     def go_to_home_pos(self):
-        print("home")
+        # OK
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE)
+        self.servo_controler.moveServo(JOINT_GRIPPER_GRAP, TITA_5_BASE)
+        self.servo_controler.moveServo(JOINT_ROTATE_GRIPPER, TITA_6_BASE)
+        self.servo_controler.ifLessThenMoveTo(JOINT_DOUBLE_GEAR, TITA_0_BASE, TITA_0_BASE)
+        self.servo_controler.ifGreatThenMoveTo(JOINT_ELBOL, TITA_2_BASE, TITA_2_BASE)
+        self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1)
+        self.servo_controler.moveServo(JOINT_ELBOL, TITA_2_BASE_1)
+        self.servo_controler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
+        self.servo_controler.moveServo(JOINT_SHOULDER, TITA_3_BASE)
+        sleep(1)
         
     def go_to_capture_left_pos(self):
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 5)
+        sleep(0.5)        
         print("left capture")
         
     def go_to_capture_right_pos(self):
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 5)
+        sleep(0.5)
         print("right capture")
+    
+    def go_to_center(self):
+        self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE)
         
     def go_to_bin_pos(self, bin_num):
-        print("going to ", bin_num)
+        if bin_num == 1:
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 20)
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - 20)
+            sleep(1)
+            self.go_to_center()
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1)
+            sleep(1)
+        if bin_num == 2:
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE + 10)
+            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - 10)
+            sleep(1)
+            self.go_to_center()
+            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
+            sleep(1)
+        if bin_num == 3:
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 10)
+            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE - 10)
+            sleep(1)
+            self.go_to_center()
+            self.servo_contorler.moveServo(JOINT_UPPER_ELBOL, TITA_4_BASE)
+            sleep(1)
+        if bin_num == 4:
+            self.servo_controler.moveServo(JOINT_BASE, TITA_7_BASE - 20)
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1 - 20)
+            sleep(1)
+            self.go_to_center()
+            self.servo_controler.verticaleMoveDoubleGear(TITA_0_BASE_1)
+            sleep(1)
         

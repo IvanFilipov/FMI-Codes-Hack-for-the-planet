@@ -1,5 +1,6 @@
 import sys
 import threading
+import time
 
 sys.path.append('../../common')
 
@@ -7,7 +8,7 @@ from constants import *
 
 from client_server.communication import \
      start_HTTP_server, send_ready_to_PC,\
-     client_sem, last_category
+     client_sem, get_last_category
 
 from camera.camera_processings import Camera
 from control.robo_control import RobotController
@@ -26,6 +27,7 @@ def capture_object_from_diff_angles(cam, robo):
     cam.store_capture(RPI_IMG_PATH_LEFT_LOCAL)
     robo.go_to_capture_right_pos()
     cam.store_capture(RPI_IMG_PATH_RIGHT_LOCAL)
+    robo.go_to_center()
     
 
 if __name__ == "__main__":
@@ -53,5 +55,5 @@ if __name__ == "__main__":
         print("Blocking until the object is classified by the PC...")
         client_sem.acquire(True) # block for client request
     
-        print("Going to bin: ", last_category)
-        robo.go_to_bin_pos(last_category)
+        print("Going to bin: ", get_last_category())
+        robo.go_to_bin_pos(int(get_last_category()))
