@@ -34,8 +34,8 @@ class ProcessModel(object):
     """docstring for ProcessModel"""
     def __init__(self):
         super(ProcessModel, self).__init__()
-        # self.modelPath = "D:\FMI code\VGG16 Garbage Classifier.h5"
-        self.modelPath = "D:\FMI code\models\my_model.h5"
+        self.modelPath = "D:\FMI code\VGG16 Garbage Classifier.h5"
+        # self.modelPath = "D:\FMI code\models\my_model.h5"
         # self.modelPath = "D:\FMI code\CNN-Modelo.h5"
         # self.modelPath = "D:\FMI code\\trained_model.h5"
         # self.modelPath = "D:\FMI code\models\model_385-0.97.h5"
@@ -119,6 +119,9 @@ class ProcessModel(object):
 
         clasesArray = [resultClass1, resultClass2, resultClass3]
         indexArray = [resultIndex1, resultIndex2, resultIndex3]
+        
+        print("clasesArray {}".format(clasesArray))
+        print("indexArray {}".format(indexArray))
 
         resultIndex = self.most_frequent(indexArray)
         print(resultIndex)
@@ -133,6 +136,11 @@ class ProcessModel(object):
         print("Predicted all class {}".format(resultClass))
         print("Predicted all index {}".format(resultIndex))
         return {resultIndex, resultClass}
+
+
+# processModel = ProcessModel()
+# # processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
+# clasificationResultIndex, clasificationResultClass = processModel.predictAll(RPI_IMG_PATH_CENTER, RPI_IMG_PATH_LEFT, RPI_IMG_PATH_RIGHT)
 
 
 
