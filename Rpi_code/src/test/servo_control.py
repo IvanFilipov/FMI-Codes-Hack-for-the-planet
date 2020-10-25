@@ -238,11 +238,12 @@ def last():
     ifLessThenMoveTo(0, 120, 120)
     # moveServo(2,90)
     ifGreatThenMoveTo(2, 90, 90)
-    verticaleMove2(180)
+    verticaleMove2(170)
     moveServo(2,0)
-    moveServo(4,90)
+    moveServo(4,140)
 
-# last()    
+last()
+#moveServo(7,120)
 
 
 # def moveStartPosition():
@@ -275,6 +276,7 @@ p2ImagePath = "./images/p2.jpeg"
 image.capture(controlImagePath)
 #Control image
 while(True):
+    break
     image.capture(p0ImagePath)
 
     if(areEqualImages(controlImagePath, p0ImagePath) != True):
