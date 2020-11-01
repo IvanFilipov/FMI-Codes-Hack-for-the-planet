@@ -130,3 +130,5 @@ dmypy.json
 
 # test images
 Rpi_code/images/
+Rpi_code/src/demo_img/
+
