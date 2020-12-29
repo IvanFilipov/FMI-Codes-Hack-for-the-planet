@@ -16,6 +16,7 @@ Dimitur<br>
 [About our idea](https://github.com/IvanFilipov/FMI-Codes-Hack-for-the-planet/tree/main/presentation)
 
 **Live presentation and demo**
+
 [![live demo](http://img.youtube.com/vi/wnEJscNp9PY/0.jpg)](https://www.youtube.com/watch?v=wnEJscNp9PY&feature=youtu.be&t=10289)
 
 [Some demos during development](https://drive.google.com/drive/folders/1QZKDwl7dU2E2eacLLmbrcDaCDCP04_2I?usp=sharing)
